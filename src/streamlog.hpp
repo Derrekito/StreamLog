@@ -152,15 +152,23 @@ public:
         std::ostringstream m_buffer;
     };
 
-    LogStatement& getLogStatement(LogLevel level);
+    LogStatement getLogStatement(LogLevel level);
 
-    LogStatement& operator<<(std::ostream& (*manipulator)(std::ostream&));
+    LogStatement operator<<(std::ostream& (*manipulator)(std::ostream&));
 
 public:
     // Method to get the singleton instance of StreamLog
-    static StreamLog& instance(const std::string& fileName, bool consoleOutput = false);
+    // NOTE: fileName and consoleOutput are only used on the FIRST call.
+    // Subsequent calls return the same instance with original parameters.
+    static StreamLog& instance(const std::string& fileName = "output.log", bool consoleOutput = false);
 
     virtual ~StreamLog();
+
+    // Delete copy and move operations (Rule of Five)
+    StreamLog(const StreamLog&) = delete;
+    StreamLog& operator=(const StreamLog&) = delete;
+    StreamLog(StreamLog&&) = delete;
+    StreamLog& operator=(StreamLog&&) = delete;
 
 protected:
     // Constructor takes in the file name to write logs to and a boolean indicating whether or not to also output to console
@@ -168,22 +176,18 @@ protected:
 
 private:
 
-    // Singleton instance of StreamLog
-    static StreamLog* m_instance;
-
     LogLevel m_level;
     LogLevel m_threshold;
 
     std::string m_fileName;
     bool m_consoleOutput;
 
-    std::string levelToString(const LogLevel& level);
-    std::string getColor();
-    virtual std::string getTimestamp();
-    virtual std::stringstream buildLog(const std::string& message);
-    void writeLog();
+    std::string levelToString(const LogLevel& level) const;
+    std::string getColor() const;
+    virtual std::string getTimestamp() const;
+    virtual std::stringstream buildLog(const std::string& message) const;
+    void writeLog(const std::string& message);
     void commitLog(const std::string& message);
-    LogStatement m_logStatement;
 };
 
 StreamLog::LogStatement log(LogLevel level);

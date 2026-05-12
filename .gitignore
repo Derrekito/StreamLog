@@ -6,3 +6,5 @@ manual/node_modules/
 manual/build/
 manual/output/
 scripts/__pycache__/
+*.txt
+*.log

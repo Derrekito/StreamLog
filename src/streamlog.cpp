@@ -42,22 +42,16 @@ const std::string StreamColor::ErrorColor = STREAMLOG_COLOR_ERROR;
 const std::string StreamColor::FatalColor = STREAMLOG_COLOR_FATAL;
 const std::string StreamColor::reset      = STREAMLOG_COLOR_RESET;
 
-// Singleton instance of StreamLog
-StreamLog* StreamLog::m_instance = NULL;
-
 // Constructor for the StreamLog class, sets the file name and whether to output to console
 StreamLog::StreamLog(const std::string& fileName,
                bool consoleOutput) : m_threshold(LOG_LEVEL),
                                      m_fileName(fileName),
-                                     m_consoleOutput(consoleOutput),
-                                     m_logStatement(*this)
+                                     m_consoleOutput(consoleOutput)
 {}
 
 // Constructor for the LogStatement subclass, sets the log level
 StreamLog::LogStatement::LogStatement(StreamLog& logger) : m_logger(logger) {}
 
-// StreamLog::LogStatement::LogStatement(LogStatement&& other) noexcept
-//     : m_logger(other.m_logger), m_buffer(std::move(other.m_buffer)){}
 StreamLog::LogStatement::LogStatement(LogStatement&& other) noexcept
     : m_logger(other.m_logger), m_buffer(other.m_buffer.str())
 {
@@ -72,17 +66,15 @@ StreamLog::~StreamLog()
 }
 
 // Method to get the singleton instance of StreamLog
+// Meyer's singleton: thread-safe in C++11+, no manual memory management
 StreamLog& StreamLog::instance(const std::string& fileName, bool consoleOutput)
 {
-    if (m_instance == NULL)
-    {
-        m_instance = new StreamLog(fileName, consoleOutput);
-    }
-    return *m_instance;
+    static StreamLog instance(fileName, consoleOutput);
+    return instance;
 }
 
 // Converts log level to string representation
-std::string StreamLog::levelToString(const LogLevel& level)
+std::string StreamLog::levelToString(const LogLevel& level) const
 {
     switch(level)
     {
@@ -97,7 +89,7 @@ std::string StreamLog::levelToString(const LogLevel& level)
 }
 
 // Returns the color code based on log level
-std::string StreamLog::getColor()
+std::string StreamLog::getColor() const
 {
     switch(m_level)
     {
@@ -111,7 +103,7 @@ std::string StreamLog::getColor()
     }
 }
 
-std::string StreamLog::getTimestamp()
+std::string StreamLog::getTimestamp() const
 {
     // Store the current time in seconds (since the UNIX epoch)
     time_t now = std::time(NULL);
@@ -123,7 +115,7 @@ std::string StreamLog::getTimestamp()
     return ss.str();
 }
 
-std::stringstream StreamLog::buildLog(const std::string& message)
+std::stringstream StreamLog::buildLog(const std::string& message) const
 {
     std::stringstream decorated_stream;
     decorated_stream << getTimestamp() << " ";
@@ -134,59 +126,55 @@ std::stringstream StreamLog::buildLog(const std::string& message)
     return decorated_stream;
 }
 
-void StreamLog::writeLog()
+void StreamLog::writeLog(const std::string& message)
 {
-    // Before opening the log file:
-    if (create_recursive(m_fileName))
+    if (message.empty())
     {
-        // open file in append mode
-        std::ofstream out(m_fileName.c_str(), std::ios_base::app);
-
-        // sanity check
-        if (!out.is_open())
-        {
-            std::cerr << "Error: Failed to open log file" << std::endl;
-            return;
-        }
-
-        // Write the buffer contents to the log file and console
-        std::string message = m_logStatement.getBufferContent();
-        if (!message.empty())
-        {
-
-            std::string decorated_msg = buildLog(message).str();
-            if (m_consoleOutput)
-            {
-                std::cerr << decorated_msg;
-            }
-            out << decorated_msg;
-            // close log file
-            out.close();
-            m_logStatement.clearBuffer();
-        }
+        return;
     }
-    else
+
+    // Before opening the log file:
+    if (!create_recursive(m_fileName))
     {
         std::cerr << "Failed to create directory for log file: " << m_fileName << std::endl;
         // Don't log this message, but don't crash the application either
         return;
     }
+
+    // open file in append mode
+    std::ofstream out(m_fileName.c_str(), std::ios_base::app);
+
+    // sanity check
+    if (!out.is_open())
+    {
+        std::cerr << "Error: Failed to open log file" << std::endl;
+        return;
+    }
+
+    // Write the decorated message to the log file and console
+    std::string decorated_msg = buildLog(message).str();
+    if (m_consoleOutput)
+    {
+        std::cerr << decorated_msg;
+    }
+    out << decorated_msg;
+    out.close();
 }
 
 void StreamLog::commitLog(const std::string& message)
 {
     if (m_level >= m_threshold)
     {
-        m_logStatement.appendToBuffer(message);
-        writeLog();
+        writeLog(message);
     }
 }
 
 
-StreamLog::LogStatement& StreamLog::operator<<(std::ostream& (*manipulator)(std::ostream&))
+StreamLog::LogStatement StreamLog::operator<<(std::ostream& (*manipulator)(std::ostream&))
 {
-    m_logStatement << manipulator;
-    return m_logStatement;
+    LogStatement stmt(*this);
+    stmt << manipulator;
+    return stmt;
 }
 
 void StreamLog::LogStatement::clearBuffer()
@@ -205,12 +193,10 @@ void StreamLog::LogStatement::appendToBuffer(const std::string& content)
     m_buffer << content;
 }
 
-StreamLog::LogStatement& StreamLog::getLogStatement(LogLevel level)
+StreamLog::LogStatement StreamLog::getLogStatement(LogLevel level)
 {
     m_level = level;
-    //return LogStatement(*this);
-    //return std::move(m_logStatement);
-    return m_logStatement;
+    return LogStatement(*this);
 }
 
 StreamLog::LogStatement::~LogStatement()
@@ -222,5 +208,5 @@ StreamLog::LogStatement log(LogLevel level)
 {
     // Get the Singleton instance of StreamLog
     static StreamLog& logger = StreamLog::instance(LOG_FILE, true);
-    return std::move(logger.getLogStatement(level));
+    return logger.getLogStatement(level);
 }
