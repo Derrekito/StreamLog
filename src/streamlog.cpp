@@ -1,6 +1,8 @@
 #include <streamlog.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <cerrno>
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -65,11 +67,8 @@ StreamLog::LogStatement::LogStatement(LogStatement&& other) noexcept
 // Destructor for the StreamLog class
 StreamLog::~StreamLog()
 {
-    if (m_instance != NULL)
-    {
-        delete m_instance;
-        m_instance = NULL;
-    }
+    // Singleton cleanup happens automatically at program exit
+    // Do NOT delete m_instance here - that would be deleting 'this'!
 }
 
 // Method to get the singleton instance of StreamLog
@@ -167,10 +166,10 @@ void StreamLog::writeLog()
         }
     }
     else
-{
-        std::cerr << "Failed to create directory for log file." << std::endl;
-        // Handle the error accordingly
-        exit(1);
+    {
+        std::cerr << "Failed to create directory for log file: " << m_fileName << std::endl;
+        // Don't log this message, but don't crash the application either
+        return;
     }
 }
 

@@ -41,7 +41,7 @@ sudo make install         # Install to /usr/local
 Compile your application:
 
 ```bash
-g++ -std=c++11 myapp.cpp -llog -o myapp
+g++ -std=c++11 myapp.cpp -lstreamlog -o myapp
 ```
 
 ### Platform Options
