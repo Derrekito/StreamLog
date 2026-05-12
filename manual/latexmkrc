@@ -1,0 +1,14 @@
+# latexmkrc for RADCaST manual PDF generation
+# Configures latexmk to use lualatex
+
+# Use lualatex as the PDF engine
+$pdf_mode = 4;  # 4 = lualatex
+
+# Set lualatex command with shell-escape and batch mode
+$lualatex = 'lualatex -shell-escape -interaction=batchmode -halt-on-error %O %S';
+
+# Use biber for bibliography processing (biblatex)
+$biber = 'biber %O %S';
+
+# Ensure biber runs when needed
+$bibtex_use = 2;  # 2 = run biber

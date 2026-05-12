@@ -1,0 +1,2 @@
+pandocfilters==1.5.1
+Pygments==2.19.1

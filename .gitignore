@@ -1,0 +1,8 @@
+*.o
+liblog
+log/
+build/*
+manual/node_modules/
+manual/build/
+manual/output/
+scripts/__pycache__/

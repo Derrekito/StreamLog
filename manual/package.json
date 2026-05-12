@@ -1,0 +1,20 @@
+{
+  "name": "manual",
+  "version": "1.0.0",
+  "description": "This directory contains the pipeline to generate PDF/DOCX manuals from the project's markdown documentation.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "10.9.1"
+  }
+}
