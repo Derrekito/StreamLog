@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - -I../include
+    - -std=c++11
+    - -DDEBUG_LEVEL=1
+    - -DENABLE_VECTOR_LOGGING
+    - -DENABLE_MAP_LOGGING
