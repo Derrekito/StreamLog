@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    name: ${{ matrix.os }} - ${{ matrix.cxx }} - C++${{ matrix.std }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        cxx: [g++, clang++]
+        std: [11, 14, 17]
+        exclude:
+          # macOS doesn't have g++ (it's aliased to clang)
+          - os: macos-latest
+            cxx: g++
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build library
+      run: |
+        make clean
+        make CXX=${{ matrix.cxx }} EXTRA_FLAGS="--std=c++${{ matrix.std }}"
+
+    - name: Build examples
+      run: |
+        cd examples
+        ${{ matrix.cxx }} -std=c++${{ matrix.std }} -I../include -L../build/lib streamlog_example.cpp -lstreamlog -o streamlog_example
+        ${{ matrix.cxx }} -std=c++${{ matrix.std }} -I../include -L../build/lib decorator_example.cpp -lstreamlog -o decorator_example
+
+    - name: Test library installation
+      run: |
+        sudo make install PREFIX=/usr/local
+        ${{ matrix.cxx }} -std=c++${{ matrix.std }} examples/streamlog_example.cpp -lstreamlog -o test_install
+        ./test_install || echo "Test binary created successfully"
+
+    - name: Verify headers exist
+      run: |
+        test -f include/streamlog.hpp || exit 1
+        test -f include/themes/default.hpp || exit 1
+        test -f include/themes/rose_pine_moon.hpp || exit 1

@@ -107,10 +107,10 @@ CORE_OBJ := $(OBJ_DIR)/$(notdir $(SRC_FILES:.cpp=.o))
 ####################################################
 # Library targets
 ####################################################
-LIB_STATIC  := $(LIB_DIR)/$(LIB_TARGET).a
-LIB_DYNAMIC := $(LIB_DIR)/$(LIB_TARGET).so
+LIB_STATIC  := $(LIB_DIR)/lib$(LIB_TARGET).a
+LIB_DYNAMIC := $(LIB_DIR)/lib$(LIB_TARGET).so
 ifeq ($(mac),1)
-	LIB_MAC := $(LIB_DIR)/$(LIB_TARGET).dylib
+	LIB_MAC := $(LIB_DIR)/lib$(LIB_TARGET).dylib
 endif
 
 # Define all library targets

@@ -12,11 +12,11 @@ public:
     LoggerJR& operator=(const LoggerJR& ljr) = delete;
     LoggerJR& operator=(LoggerJR&& ljr) = delete;
 
-    std::string getTimestamp() override {
+    std::string getTimestamp() const override {
         return "NOW";
     }
 
-    std::stringstream buildLog(const std::string& message) override {
+    std::stringstream buildLog(const std::string& message) const override {
         std::stringstream decorated_stream;
         decorated_stream << getTimestamp() << " ";
         decorated_stream << "{{" << "TEST LEVEL" << "}} ";
@@ -24,7 +24,7 @@ public:
         return decorated_stream;
     }
 
-    StreamLog::LogStatement& operator()(LogLevel level) {
+    StreamLog::LogStatement operator()(LogLevel level) {
         return StreamLog::instance(LOG_FILE, true).getLogStatement(level);
     }
 };
