@@ -68,9 +68,10 @@ LDLIBS  ?=
 # Project paths
 ####################################################
 SRC_PATH := src
+INCLUDE_PATH := include
 
 # Add include directories
-INCLUDE_FLAGS += -I$(SRC_PATH)
+INCLUDE_FLAGS += -I$(INCLUDE_PATH)
 
 # Add warning flags
 WARNING_FLAGS += -Wall -Wextra
@@ -178,5 +179,5 @@ install: $(LIB_DYNAMIC) $(LIB_STATIC)
 	install -d $(DESTDIR)$(PREFIX)/include
 	install -m 644 $(LIB_DYNAMIC) $(DESTDIR)$(PREFIX)/lib/
 	install -m 644 $(LIB_STATIC) $(DESTDIR)$(PREFIX)/lib/
-	install -m 644 $(SRC_PATH)/streamlog.hpp $(DESTDIR)$(PREFIX)/include/
+	install -m 644 $(INCLUDE_PATH)/streamlog.hpp $(DESTDIR)$(PREFIX)/include/
 	@command -v ldconfig >/dev/null && ldconfig || true
