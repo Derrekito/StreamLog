@@ -125,7 +125,7 @@ endif
 # Recipes
 ####################################################
 # Declare phony targets to avoid conflicts with files of the same name
-.PHONY: all clean distclean install prepare
+.PHONY: all clean distclean install prepare docs
 
 # Default target
 all: $(LIB_ALL)
@@ -160,6 +160,14 @@ clean:
 # Extended cleanup
 distclean: clean
 	@$(RM) *~ *.swp *.bak *.tmp
+	@$(RM) -r docs
+
+# Generate documentation
+docs:
+	@command -v doxygen >/dev/null || { echo "Error: doxygen not found"; exit 1; }
+	@echo "Generating documentation..."
+	@doxygen Doxyfile
+	@echo "Documentation generated in docs/html/index.html"
 
 # Install rule for the library
 install: $(LIB_DYNAMIC) $(LIB_STATIC)

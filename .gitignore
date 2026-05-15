@@ -8,3 +8,4 @@ manual/output/
 scripts/__pycache__/
 *.txt
 *.log
+/docs/
