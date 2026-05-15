@@ -9,7 +9,7 @@
 
 #define LOG_FILE "output.log"
 
-bool create_recursive(const std::string& path)
+bool StreamLog::createDirectories(const std::string& path) const
 {
     size_t pos = 0;
     while ((pos = path.find('/', pos + 1)) != std::string::npos)
@@ -134,7 +134,7 @@ void StreamLog::writeLog(const std::string& message)
     }
 
     // Before opening the log file:
-    if (!create_recursive(m_fileName))
+    if (!createDirectories(m_fileName))
     {
         std::cerr << "Failed to create directory for log file: " << m_fileName << std::endl;
         // Don't log this message, but don't crash the application either

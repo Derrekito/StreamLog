@@ -92,13 +92,6 @@ enum LogLevel {
 #endif
 
 /**
- * @brief Create directories recursively
- * @param path Directory path to create
- * @return true if successful or directory exists, false on error
- */
-bool create_recursive(const std::string &path);
-
-/**
  * @brief ANSI color codes for log levels
  *
  * Color definitions are loaded from theme headers at compile time.
@@ -340,6 +333,13 @@ private:
    * @param message Message to commit
    */
   void commitLog(const std::string &message);
+
+  /**
+   * @brief Create directories recursively for log file path
+   * @param path Directory path to create
+   * @return true if successful or directory exists, false on error
+   */
+  bool createDirectories(const std::string &path) const;
 };
 
 /**
