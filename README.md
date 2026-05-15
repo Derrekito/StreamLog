@@ -4,6 +4,7 @@ A lightweight, header-friendly C++11 logging library with stream-based API, colo
 
 [![CI](https://github.com/Derrekito/StreamLog/actions/workflows/ci.yml/badge.svg)](https://github.com/Derrekito/StreamLog/actions/workflows/ci.yml)
 [![Release](https://github.com/Derrekito/StreamLog/actions/workflows/release.yml/badge.svg)](https://github.com/Derrekito/StreamLog/releases)
+[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://derrekito.github.io/StreamLog/)
 
 ## Features
 
@@ -15,6 +16,8 @@ A lightweight, header-friendly C++11 logging library with stream-based API, colo
 - **Thread-safe singleton** - Meyer's singleton pattern (C++11)
 - **Extensible** - Inherit and override formatting/timestamps
 - **Cross-platform** - Linux, macOS (x86_64, ARM64)
+
+📚 **[Full API Documentation](https://derrekito.github.io/StreamLog/)**
 
 ## Quick Start
 

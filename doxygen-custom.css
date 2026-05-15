@@ -30,9 +30,34 @@
 }
 
 /* Global background and text */
-body, div.contents, div.header {
+body, div.contents {
   background-color: var(--base) !important;
   color: var(--text) !important;
+}
+
+div.header {
+  background-color: var(--base) !important;
+  color: var(--text) !important;
+  border-color: var(--overlay) !important;
+}
+
+.headertitle {
+  border-color: var(--overlay) !important;
+}
+
+/* Top bar / title area */
+#top,
+#titlearea {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--overlay) !important;
+}
+
+#titlearea table {
+  background-color: var(--surface) !important;
+}
+
+#projectrow {
+  background-color: var(--surface) !important;
 }
 
 /* Headers */
@@ -54,9 +79,114 @@ a:hover, a:active {
   text-decoration: underline;
 }
 
-/* Navigation bar */
+/* Main menu */
+#main-nav,
+#main-menu,
+.sm,
+.sm-dox {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+#main-menu a,
+.sm-dox a {
+  color: var(--text) !important;
+  background-color: var(--surface) !important;
+}
+
+#main-menu a:hover,
+.sm-dox a:hover {
+  color: var(--foam) !important;
+  background-color: var(--overlay) !important;
+}
+
+#main-menu a.highlighted,
+.sm-dox a.highlighted {
+  background-color: var(--overlay) !important;
+}
+
+/* Mobile menu button */
+.main-menu-btn,
+.main-menu-btn-icon {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+/* Submenu styling */
+.sm-dox ul {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--overlay) !important;
+}
+
+.sm-dox ul a {
+  background-color: var(--surface) !important;
+}
+
+.sm-dox ul a:hover {
+  background-color: var(--overlay) !important;
+}
+
+/* Modern chevron indicators instead of diamond */
+.sm-dox a span.sub-arrow {
+  border-right: 2px solid var(--subtle) !important;
+  border-bottom: 2px solid var(--subtle) !important;
+  background-color: transparent !important;
+}
+
+.sm-dox a:hover span.sub-arrow,
+.sm-dox a.highlighted span.sub-arrow {
+  border-right: 2px solid var(--foam) !important;
+  border-bottom: 2px solid var(--foam) !important;
+  background-color: transparent !important;
+}
+
+/* Mobile menu - replace +/- with chevrons */
+@media(max-width: 767px) {
+  .sm-dox a span.sub-arrow:before {
+    content: '›' !important;
+    color: var(--subtle) !important;
+  }
+
+  .sm-dox a.highlighted span.sub-arrow:before {
+    content: '▾' !important;
+    color: var(--foam) !important;
+  }
+}
+
+/* Navigation path (breadcrumbs at bottom) */
 #nav-path,
-.navpath,
+.navpath {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+#nav-path ul,
+.navpath ul {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+#nav-path li,
+.navpath li,
+.navelem {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--overlay) !important;
+}
+
+#nav-path a,
+.navpath a,
+.navelem a {
+  color: var(--iris) !important;
+}
+
+#nav-path a:hover,
+.navpath a:hover,
+.navelem a:hover {
+  color: var(--foam) !important;
+}
+
+/* Navigation bar / tabs */
 .tabs,
 .tabs1, .tabs2, .tabs3 {
   background-color: var(--surface) !important;
@@ -78,13 +208,22 @@ a:hover, a:active {
   color: var(--text) !important;
 }
 
-/* Code blocks */
+/* Code blocks - terminal/console colors */
 div.fragment,
-pre.fragment,
-div.line,
-.lineno {
+pre.fragment {
   background-color: var(--surface) !important;
   border-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+div.line {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+  color: var(--foam) !important; /* Use foam for console text like in terminal */
+}
+
+/* Comments in code blocks (lines starting with #) */
+div.line:first-line {
   color: var(--text) !important;
 }
 
@@ -93,36 +232,59 @@ div.line,
   color: var(--muted) !important;
 }
 
-/* Syntax highlighting */
-span.keyword {
-  color: var(--pine) !important;
-  font-weight: bold;
+/* Syntax highlighting - based on Atom Rosé Pine Moon theme */
+span.keyword,
+.keyword {
+  color: #eabbb9 !important; /* pink - keywords like if, for, class */
+  font-weight: normal;
 }
 
-span.keywordtype {
-  color: var(--gold) !important;
-}
-
-span.keywordflow {
-  color: var(--love) !important;
-  font-weight: bold;
-}
-
-span.comment {
-  color: var(--muted) !important;
+span.keywordtype,
+.keywordtype {
+  color: #c3a5e6 !important; /* purple - types like int, void */
   font-style: italic;
 }
 
-span.preprocessor {
-  color: var(--iris) !important;
+span.keywordflow,
+.keywordflow {
+  color: #eabbb9 !important; /* pink - control flow like return, break */
+  font-weight: normal;
 }
 
-span.stringliteral {
-  color: var(--foam) !important;
+span.comment,
+.comment {
+  color: #6f6e85 !important; /* muted gray - comments */
+  font-style: italic;
 }
 
-span.charliteral {
-  color: var(--rose) !important;
+span.preprocessor,
+.preprocessor {
+  color: #ea6f91 !important; /* love/red - preprocessor directives */
+}
+
+span.stringliteral,
+.stringliteral {
+  color: #f1ca93 !important; /* yellow/gold - string literals */
+}
+
+span.charliteral,
+.charliteral {
+  color: #f1ca93 !important; /* yellow/gold - character literals */
+}
+
+/* Additional syntax elements */
+.hl_function {
+  color: #9bced7 !important; /* cyan/foam - function names */
+}
+
+.hl_enumvalue {
+  color: #c3a5e6 !important; /* purple - enum values */
+}
+
+span.type,
+.type {
+  color: #c3a5e6 !important; /* purple - type names */
+  font-style: italic;
 }
 
 /* Tables */
@@ -195,9 +357,69 @@ dl.deprecated {
 }
 
 /* Directory/file lists */
-.directory .levels span,
-.directory .arrow {
+.directory {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+table.directory {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+table.directory tr {
+  background-color: var(--surface) !important;
+}
+
+table.directory tr.even {
+  background-color: var(--surface) !important;
+}
+
+table.directory tr.odd {
+  background-color: var(--highlight-low) !important;
+}
+
+table.directory td {
+  color: var(--text) !important;
+  border-color: var(--overlay) !important;
+}
+
+table.directory td.entry {
+  color: var(--text) !important;
+}
+
+table.directory td.desc {
+  color: var(--subtle) !important;
+}
+
+table.directory a {
   color: var(--iris) !important;
+}
+
+table.directory a:hover {
+  color: var(--foam) !important;
+}
+
+.directory .levels {
+  color: var(--text) !important;
+}
+
+.directory .levels span {
+  color: var(--iris) !important;
+  cursor: pointer;
+}
+
+.directory .levels span:hover {
+  color: var(--foam) !important;
+}
+
+.directory .arrow,
+.arrow {
+  color: var(--iris) !important;
+}
+
+.arrowhead {
+  border-color: var(--iris) !important;
 }
 
 /* Icons */
@@ -234,9 +456,30 @@ hr.footer {
 
 /* Sidebar/tree view */
 #side-nav,
+#nav-tree,
+#nav-tree-contents,
 .ui-resizable-e {
   background-color: var(--surface) !important;
   border-color: var(--overlay) !important;
+}
+
+#nav-tree .item,
+#nav-tree .label {
+  color: var(--text) !important;
+}
+
+#nav-tree .selected {
+  background-color: var(--overlay) !important;
+  color: var(--foam) !important;
+}
+
+/* Tree view links */
+#nav-tree a {
+  color: var(--text) !important;
+}
+
+#nav-tree a:hover {
+  color: var(--foam) !important;
 }
 
 /* Member items */
@@ -279,14 +522,16 @@ tr.heading {
   color: var(--text) !important;
 }
 
-/* Inline code */
+/* Inline code - high contrast for readability */
 code,
-tt {
-  background-color: var(--surface) !important;
-  color: var(--rose) !important;
-  border: 1px solid var(--overlay);
+tt,
+.tt {
+  background-color: var(--highlight-low) !important;
+  color: var(--foam) !important;
+  border: 1px solid var(--overlay) !important;
   padding: 2px 4px;
   border-radius: 3px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 /* Brief descriptions */
