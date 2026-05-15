@@ -114,8 +114,28 @@ struct StreamColor {
  * file and optionally console. Uses RAII pattern via LogStatement to
  * ensure messages are committed when the statement goes out of scope.
  *
+ * ## Usage Patterns
+ *
+ * **Standard Usage (Singleton):**
+ * @code{.cpp}
+ * log(INFO) << "Using global singleton";
+ * @endcode
+ *
+ * **Custom Logger (Inheritance):**
+ * Derive from StreamLog and override virtual methods for custom behavior.
+ * Derived classes are instantiated directly, NOT as singletons.
+ * @code{.cpp}
+ * class CustomLogger : public StreamLog {
+ *   std::string getTimestamp() const override { return "[NOW]"; }
+ * };
+ * CustomLogger myLogger;  // Direct instantiation
+ * myLogger.getLogStatement(INFO) << "Custom formatting";
+ * @endcode
+ *
  * @note This class uses Meyer's singleton (C++11 thread-safe static local).
  *       Copy and move operations are explicitly deleted.
+ * @note Singleton pattern applies only to base StreamLog class.
+ *       Derived classes should be instantiated directly.
  */
 class StreamLog {
 public:
@@ -287,7 +307,6 @@ protected:
    */
   explicit StreamLog(const std::string &fileName, bool consoleOutput = false);
 
-private:
   LogLevel m_level;       ///< Current log level being written
   LogLevel m_threshold;   ///< Minimum level to actually write (compile-time)
 
@@ -334,6 +353,7 @@ private:
    */
   void commitLog(const std::string &message);
 
+private:
   /**
    * @brief Create directories recursively for log file path
    * @param path Directory path to create
