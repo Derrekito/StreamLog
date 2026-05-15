@@ -1,0 +1,314 @@
+/* Rosé Pine Moon theme for Doxygen
+ *
+ * Color scheme based on Rosé Pine Moon
+ * https://rosepinetheme.com/
+ *
+ * Rosé Pine is licensed under the MIT License
+ * Copyright (c) Rosé Pine
+ * https://github.com/rose-pine
+ *
+ * This stylesheet applies Rosé Pine Moon colors to Doxygen-generated documentation.
+ */
+
+/* Rosé Pine Moon color palette */
+:root {
+  --base: #232136;
+  --surface: #2a273f;
+  --overlay: #393552;
+  --muted: #6e6a86;
+  --subtle: #908caa;
+  --text: #e0def4;
+  --love: #eb6f92;
+  --gold: #f6c177;
+  --rose: #ea9a97;
+  --pine: #3e8fb0;
+  --foam: #9ccfd8;
+  --iris: #c4a7e7;
+  --highlight-low: #2a283e;
+  --highlight-med: #44415a;
+  --highlight-high: #56526e;
+}
+
+/* Global background and text */
+body, div.contents, div.header {
+  background-color: var(--base) !important;
+  color: var(--text) !important;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6,
+.title,
+div.headertitle .title {
+  color: var(--foam) !important;
+  border-bottom-color: var(--overlay) !important;
+}
+
+/* Links */
+a, a:link, a:visited {
+  color: var(--iris) !important;
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  color: var(--foam) !important;
+  text-decoration: underline;
+}
+
+/* Navigation bar */
+#nav-path,
+.navpath,
+.tabs,
+.tabs1, .tabs2, .tabs3 {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+.tablist li,
+.tabs1 li, .tabs2 li, .tabs3 li {
+  background-color: var(--surface) !important;
+}
+
+.tablist li.current,
+.tabs1 li.current, .tabs2 li.current, .tabs3 li.current {
+  background-color: var(--overlay) !important;
+}
+
+.tablist a,
+.tabs1 a, .tabs2 a, .tabs3 a {
+  color: var(--text) !important;
+}
+
+/* Code blocks */
+div.fragment,
+pre.fragment,
+div.line,
+.lineno {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+/* Line numbers */
+.lineno {
+  color: var(--muted) !important;
+}
+
+/* Syntax highlighting */
+span.keyword {
+  color: var(--pine) !important;
+  font-weight: bold;
+}
+
+span.keywordtype {
+  color: var(--gold) !important;
+}
+
+span.keywordflow {
+  color: var(--love) !important;
+  font-weight: bold;
+}
+
+span.comment {
+  color: var(--muted) !important;
+  font-style: italic;
+}
+
+span.preprocessor {
+  color: var(--iris) !important;
+}
+
+span.stringliteral {
+  color: var(--foam) !important;
+}
+
+span.charliteral {
+  color: var(--rose) !important;
+}
+
+/* Tables */
+table.memberdecls,
+table.fieldtable,
+table.memname {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+.memItemLeft, .memItemRight,
+.memTemplItemLeft, .memTemplItemRight,
+.memTemplParams {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+/* Function/member documentation */
+.memproto,
+.memdoc {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+.memname {
+  color: var(--foam) !important;
+}
+
+.paramtype {
+  color: var(--gold) !important;
+}
+
+.paramname {
+  color: var(--rose) !important;
+}
+
+/* Sections */
+div.toc,
+div.textblock,
+div.ah {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+/* Search box */
+#MSearchBox,
+.MSearchBoxInactive,
+.MSearchBoxActive {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+/* Warnings/Notes/etc */
+dl.warning,
+dl.attention,
+dl.note {
+  background-color: var(--highlight-low) !important;
+  border-left: 4px solid var(--gold) !important;
+  color: var(--text) !important;
+}
+
+dl.bug,
+dl.deprecated {
+  background-color: var(--highlight-low) !important;
+  border-left: 4px solid var(--love) !important;
+  color: var(--text) !important;
+}
+
+/* Directory/file lists */
+.directory .levels span,
+.directory .arrow {
+  color: var(--iris) !important;
+}
+
+/* Icons */
+.icona,
+.iconfopen,
+.iconfclosed {
+  filter: brightness(0) saturate(100%) invert(88%) sepia(11%) saturate(291%) hue-rotate(198deg) brightness(103%) contrast(92%);
+}
+
+/* Top page header */
+#projectname {
+  color: var(--foam) !important;
+  font-weight: bold;
+}
+
+#projectbrief,
+#projectnumber {
+  color: var(--subtle) !important;
+}
+
+/* Footer */
+.footer,
+hr.footer {
+  background-color: var(--surface) !important;
+  color: var(--muted) !important;
+  border-top-color: var(--overlay) !important;
+}
+
+/* Class list */
+.classindex dl,
+.classindex dd {
+  color: var(--text) !important;
+}
+
+/* Sidebar/tree view */
+#side-nav,
+.ui-resizable-e {
+  background-color: var(--surface) !important;
+  border-color: var(--overlay) !important;
+}
+
+/* Member items */
+.mdescLeft, .mdescRight {
+  background-color: var(--surface) !important;
+  color: var(--subtle) !important;
+}
+
+/* Alternating row colors in tables */
+.memberdecls tr:nth-child(even) {
+  background-color: var(--highlight-low) !important;
+}
+
+/* Namespace/class member groups */
+tr.heading {
+  background-color: var(--overlay) !important;
+  color: var(--text) !important;
+  font-weight: bold;
+}
+
+/* Return type, parameter qualifiers */
+.mlabels {
+  color: var(--subtle) !important;
+}
+
+.mlabels .mlabel {
+  background-color: var(--pine) !important;
+  color: var(--base) !important;
+  border-color: var(--pine) !important;
+}
+
+/* Template parameters */
+.memtemplate {
+  color: var(--iris) !important;
+}
+
+/* Enum values */
+.fieldtable th {
+  background-color: var(--overlay) !important;
+  color: var(--text) !important;
+}
+
+/* Inline code */
+code,
+tt {
+  background-color: var(--surface) !important;
+  color: var(--rose) !important;
+  border: 1px solid var(--overlay);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Brief descriptions */
+.brief {
+  color: var(--subtle) !important;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--overlay);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight-high);
+}
