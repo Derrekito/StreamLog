@@ -9,3 +9,5 @@ scripts/__pycache__/
 *.txt
 *.log
 /docs/
+examples/decorator_example
+examples/streamlog_example
