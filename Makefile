@@ -122,10 +122,19 @@ ifeq ($(mac),1)
 endif
 
 ####################################################
+# Test configuration
+####################################################
+TEST_DIR := tests
+TEST_SRC := $(TEST_DIR)/test_streamlog.cpp
+TEST_BIN := $(BIN_DIR)/test_streamlog
+TEST_BIN_ASAN := $(BIN_DIR)/test_streamlog_asan
+TEST_BIN_UBSAN := $(BIN_DIR)/test_streamlog_ubsan
+
+####################################################
 # Recipes
 ####################################################
 # Declare phony targets to avoid conflicts with files of the same name
-.PHONY: all clean distclean install prepare docs
+.PHONY: all clean distclean install prepare docs test test-asan test-ubsan test-memcheck test-all
 
 # Default target
 all: $(LIB_ALL)
@@ -160,7 +169,8 @@ clean:
 # Extended cleanup
 distclean: clean
 	@$(RM) *~ *.swp *.bak *.tmp
-	@$(RM) -r docs
+	@$(RM) -r docs test_logs
+	@$(RM) -f test_custom.log output.log
 
 # Generate documentation
 docs:
@@ -168,6 +178,49 @@ docs:
 	@echo "Generating documentation..."
 	@doxygen Doxyfile
 	@echo "Documentation generated in docs/html/index.html"
+
+# Build and run tests
+test: $(TEST_BIN)
+	@echo "Running unit tests..."
+	@LD_LIBRARY_PATH=$(LIB_DIR):$$LD_LIBRARY_PATH $(TEST_BIN)
+
+# Compile test binary
+$(TEST_BIN): $(TEST_SRC) $(LIB_DYNAMIC) | prepare
+	$(CXX) $(CFLAGS) -I$(TEST_DIR) $(TEST_SRC) -L$(LIB_DIR) -l$(LIB_TARGET) -o $(TEST_BIN)
+
+# AddressSanitizer - detects memory errors (use-after-free, buffer overflow, leaks)
+test-asan: $(TEST_BIN_ASAN)
+	@echo "Running tests with AddressSanitizer..."
+	@LD_LIBRARY_PATH=$(LIB_DIR):$$LD_LIBRARY_PATH ASAN_OPTIONS=detect_leaks=1 $(TEST_BIN_ASAN)
+
+$(TEST_BIN_ASAN): $(TEST_SRC) $(LIB_DYNAMIC) | prepare
+	$(CXX) $(CFLAGS) -fsanitize=address -fno-omit-frame-pointer -g -I$(TEST_DIR) $(TEST_SRC) -L$(LIB_DIR) -l$(LIB_TARGET) -o $(TEST_BIN_ASAN)
+
+# UndefinedBehaviorSanitizer - detects undefined behavior
+test-ubsan: $(TEST_BIN_UBSAN)
+	@echo "Running tests with UndefinedBehaviorSanitizer..."
+	@LD_LIBRARY_PATH=$(LIB_DIR):$$LD_LIBRARY_PATH $(TEST_BIN_UBSAN)
+
+$(TEST_BIN_UBSAN): $(TEST_SRC) $(LIB_DYNAMIC) | prepare
+	$(CXX) $(CFLAGS) -fsanitize=undefined -fno-omit-frame-pointer -g -I$(TEST_DIR) $(TEST_SRC) -L$(LIB_DIR) -l$(LIB_TARGET) -o $(TEST_BIN_UBSAN)
+
+# Memory leak check with Valgrind (if available)
+test-memcheck: $(TEST_BIN)
+	@if command -v valgrind >/dev/null 2>&1; then \
+		echo "Running tests with Valgrind memcheck..."; \
+		LD_LIBRARY_PATH=$(LIB_DIR):$$LD_LIBRARY_PATH valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 $(TEST_BIN); \
+	else \
+		echo "Valgrind not found, skipping memcheck (install with: sudo pacman -S valgrind)"; \
+		exit 1; \
+	fi
+
+# Run all test variations
+test-all: test test-asan test-ubsan
+	@echo ""
+	@echo "=== All Tests Passed ==="
+	@echo "✓ Standard tests"
+	@echo "✓ AddressSanitizer (memory errors)"
+	@echo "✓ UndefinedBehaviorSanitizer"
 
 # Install rule for the library
 install: $(LIB_DYNAMIC) $(LIB_STATIC)

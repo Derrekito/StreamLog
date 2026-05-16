@@ -218,9 +218,35 @@ g++ -std=c++11 -I../include -L../build/lib streamlog_example.cpp -lstreamlog -o 
 ./streamlog_example
 ```
 
+## Testing
+
+StreamLog includes a comprehensive unit test suite with 25+ tests covering:
+- Singleton pattern behavior
+- All log levels (TRACE through FATAL)
+- Stream chaining and type support
+- STL container logging (vectors, maps)
+- Custom logger inheritance
+- File I/O and directory creation
+- RAII semantics and buffer operations
+- Large messages and special characters
+- Rapid successive logging (stress test)
+- Multiple custom logger instances
+- Edge cases (empty messages, large vectors)
+
+**Run tests:**
+```bash
+make test              # Standard tests
+make test-asan         # AddressSanitizer (memory leaks, buffer overflows)
+make test-ubsan        # UndefinedBehaviorSanitizer
+make test-all          # Run all test variations
+make test-memcheck     # Valgrind memcheck (if installed)
+```
+
+All tests pass with zero memory leaks and no undefined behavior. Tests are automatically run in CI across multiple compilers and C++ standards.
+
 ## CI/CD
 
-- **CI**: Automatically builds on Ubuntu/macOS with g++/clang++ across C++11/14/17
+- **CI**: Automatically builds and tests on Ubuntu/macOS with g++/clang++ across C++11/14/17
 - **CD**: Automated releases with pre-built binaries on version tags
 
 See [`.github/workflows/`](.github/workflows/).

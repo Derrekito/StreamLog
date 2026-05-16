@@ -30,6 +30,15 @@ jobs:
         make clean
         make CXX=${{ matrix.cxx }} EXTRA_FLAGS="--std=c++${{ matrix.std }}"
 
+    - name: Run unit tests
+      run: make test CXX=${{ matrix.cxx }} EXTRA_FLAGS="--std=c++${{ matrix.std }}"
+
+    - name: Run memory sanitizer tests (Ubuntu + g++ + C++17 only)
+      if: matrix.os == 'ubuntu-latest' && matrix.cxx == 'g++' && matrix.std == '17'
+      run: |
+        make test-asan CXX=${{ matrix.cxx }} EXTRA_FLAGS="--std=c++${{ matrix.std }}"
+        make test-ubsan CXX=${{ matrix.cxx }} EXTRA_FLAGS="--std=c++${{ matrix.std }}"
+
     - name: Build examples
       run: |
         cd examples
